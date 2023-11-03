@@ -23,7 +23,10 @@ const ElectricityChart = () => {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
     const [checked, setChecked] = useState(false);
-    const [regression, setRegression] = useState(false);
+    const [regression, setRegression] = useState(false)
+    const [eq, setEq] = useState([])
+    const [gradient, setGradient] = useState(0)
+    const [yIntercept, setYIntercept] = useState(0)
 
     const handleChange = (event) => {
         setChecked(event.target.checked);
@@ -49,10 +52,12 @@ const ElectricityChart = () => {
     };
     const userElectricity = async () => {
         try {
-            const { data } = await axios.get(`${import.meta.env.VITE_API}/api/v1/carbon-electricity`)
-
+            const { data, } = await axios.get(`${import.meta.env.VITE_API}/api/v1/carbon-electricity`)
+console.log(data)
             setPoints(data.data)
             setLine(data.result)
+            setGradient(data.gradient)
+            setYIntercept(data.yIntercept)
             setLoading(false)
 
         } catch (error) {
@@ -65,7 +70,7 @@ const ElectricityChart = () => {
             console.log(error)
 
     }, [error])
-    console.log(line)
+    // console.log(gradient)
     return (
         // <Container width="90%" height="500px">
         //     {loading ? <h2>no data</h2> : (<ScatterChart
@@ -110,9 +115,38 @@ const ElectricityChart = () => {
         // </ResponsiveContainer>
 
         <Container width="90%" height="500px">
-            {loading ? <h2>no data</h2> : (<ComposedChart
-                width={500}
-                height={500}
+            {!regression ? <ScatterChart
+                width={800}
+                height={600}
+                data={points}
+                margin={{
+                    top: 20,
+                    right: 20,
+                    bottom: 20,
+                    left: 20
+                }} >
+                <CartesianGrid />
+                <XAxis type="number" dataKey="y" name="electricity consumption" unit="kwh" />
+                <YAxis
+                    type="number"
+                    dataKey="x"
+                    name="household number"
+                    unit="person"
+                    stroke="#8884d8" />
+
+                <Tooltip cursor={{ strokeDasharray: "3 3" }} />
+                <Scatter name="household"  fill="#8884d8" >
+                    {points.map((point, index) => (
+                        <>
+
+                            <Cell key={`cell-${index}`} fill={point.y <= 5000 ? "#0088FE" : (point.y >= 5001 && point.y <= 10000) ? "#00C49F" : (point.y >= 10001 && point.y <= 15000) ? '#FFBB28' : "red"} />
+                        </>
+                    ))}
+                </Scatter>
+
+            </ScatterChart> : (<ComposedChart
+                width={800}
+                height={600}
                 data={points}
                 margin={{
                     top: 20,
@@ -138,8 +172,12 @@ const ElectricityChart = () => {
                 {regression && <Line dataKey="x" data={line} dot={true} activeDot={{ r: 8 }} allowDuplicatedCategory={false} />}
                 <Scatter name="electricity consumption" fill="#8884d8" allowDuplicatedCategory={false} data={regression && points}>
                     {/* <Scatter name="household" dataKey="x"  fill="#8884d8" /> */}
-                    {points.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    {points.map((point, index) => (
+                        <>
+                            {console.log(point.y)}
+                            {/* <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} /> */}
+                            <Cell key={`cell-${index}`} fill={point.y <= 5000 ? "#0088FE" : (point.y >= 5001 && point.y <= 10000) ? "#00C49F" : (point.y >= 10001 && point.y <= 15000) ? '#FFBB28' : "red"} />
+                        </>
                     ))}
                 </Scatter>
             </ComposedChart>)}
@@ -151,6 +189,9 @@ const ElectricityChart = () => {
 
             <Typography variant="h6" gutterBottom>
                 household/electricity
+            </Typography>
+            <Typography variant="caption" display="block" gutterBottom>
+                Gradient: {gradient} Y Intercept: {yIntercept} 
             </Typography>
         </Container>
     );

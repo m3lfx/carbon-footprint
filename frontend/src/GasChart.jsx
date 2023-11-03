@@ -27,7 +27,7 @@ const GasChart = () => {
 
     // eslint-disable-next-line react/prop-types
     const CustomTooltip = ({ active, payload }) => {
-        console.log(payload)
+        // console.log(payload)
         // eslint-disable-next-line react/prop-types
         if (active && payload && payload.length) {
           return (
@@ -82,7 +82,7 @@ const GasChart = () => {
 
         >
             <CartesianGrid />
-            <XAxis type="number" dataKey="y" name="electricity consumption" unit="LPG tanks" />
+            <XAxis type="number" dataKey="y" name="electricity consumption" unit="LPG tanks" tickCount={10} />
             <YAxis
                 type="number"
                 dataKey="x"
@@ -111,7 +111,7 @@ const GasChart = () => {
         />} label="Show Regression Line" />
 
         <Typography variant="h6" gutterBottom>
-            household/electricity
+            household/gas
         </Typography>
     </Container>
     );

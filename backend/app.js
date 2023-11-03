@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require('cors')
 const regression = require('regression')
-const csvFilePath = './data/carbon.csv' // Resource.csv in your case
+const csvFilePath = './data/carbon2.csv' // Resource.csv in your case
 const gasCsv = './data/carbon_gas.csv'
 const csv = require('csvtojson') // Make sure you have this line in order to call functions from this modules
 
@@ -61,7 +61,7 @@ app.get('/api/v1/carbon-electricity', (req, res) => {
             predictLine.push(pts)
         })
         // res.status(200).json({result: result.points, data:chartData})
-        res.status(200).json({result: predictLine, data:chartData})
+        res.status(200).json({result: predictLine, data:chartData, gradient, yIntercept})
     })
 })
 app.get('/api/v1/carbon-gas', (req, res) => {
@@ -95,7 +95,7 @@ app.get('/api/v1/carbon-gas', (req, res) => {
             predictLine.push(pts)
         })
         // res.status(200).json({result: result.points, data:chartData})
-        res.status(200).json({result: predictLine, data:chartData})
+        res.status(200).json({result: predictLine, data:chartData, gradient, yIntercept})
     })
 })
 app.listen(8080, () => {
