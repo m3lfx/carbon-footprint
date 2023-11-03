@@ -24,7 +24,7 @@ const ElectricityChart = () => {
     const [error, setError] = useState('')
     const [checked, setChecked] = useState(false);
     const [regression, setRegression] = useState(false)
-    const [eq, setEq] = useState([])
+    
     const [gradient, setGradient] = useState(0)
     const [yIntercept, setYIntercept] = useState(0)
 
@@ -174,7 +174,7 @@ console.log(data)
                     {/* <Scatter name="household" dataKey="x"  fill="#8884d8" /> */}
                     {points.map((point, index) => (
                         <>
-                            {console.log(point.y)}
+                            
                             {/* <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} /> */}
                             <Cell key={`cell-${index}`} fill={point.y <= 5000 ? "#0088FE" : (point.y >= 5001 && point.y <= 10000) ? "#00C49F" : (point.y >= 10001 && point.y <= 15000) ? '#FFBB28' : "red"} />
                         </>

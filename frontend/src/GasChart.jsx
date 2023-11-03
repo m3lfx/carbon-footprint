@@ -70,8 +70,8 @@ const GasChart = () => {
     return (
         <Container width="90%" height="500px">
         {loading ? <h2>no data</h2> : (<ComposedChart
-            width={500}
-            height={500}
+            width={800}
+            height={600}
             data={points}
             margin={{
                 top: 20,
