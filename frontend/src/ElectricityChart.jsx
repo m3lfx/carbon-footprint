@@ -11,7 +11,7 @@ import {
     Line,
     Cell,
 } from 'recharts';
-import { Container, Switch, FormControlLabel, Typography } from '@mui/material';
+import { Container, Switch, FormControlLabel, Typography, Box, TextField, Button } from '@mui/material';
 
 import axios from "axios";
 
@@ -24,14 +24,32 @@ const ElectricityChart = () => {
     const [error, setError] = useState('')
     const [checked, setChecked] = useState(false);
     const [regression, setRegression] = useState(false)
-    
+
     const [gradient, setGradient] = useState(0)
     const [yIntercept, setYIntercept] = useState(0)
+    const [val, setVal] = useState('')
+    const [predict, setPredict] = useState([])
 
     const handleChange = (event) => {
         setChecked(event.target.checked);
         setRegression(!checked)
     };
+    const submitHandler = async (e) => {
+        e.preventDefault()
+        try {
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+            const { data } = await axios.post(`${import.meta.env.VITE_API}/api/v1/predict`, { value: val, type: 'electricity' }, config)
+            console.log(data)
+            setPredict(data.predict)
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
 
     // eslint-disable-next-line react/prop-types
     const CustomTooltip = ({ active, payload }) => {
@@ -53,7 +71,7 @@ const ElectricityChart = () => {
     const userElectricity = async () => {
         try {
             const { data, } = await axios.get(`${import.meta.env.VITE_API}/api/v1/carbon-electricity`)
-console.log(data)
+            console.log(data)
             setPoints(data.data)
             setLine(data.result)
             setGradient(data.gradient)
@@ -126,8 +144,8 @@ console.log(data)
                     left: 20
                 }} >
                 <CartesianGrid />
-                <XAxis type="number" dataKey="y" name="electricity consumption" unit="kwh" />
-                <YAxis
+                <YAxis type="number" dataKey="y" name="electricity consumption" unit="kwh" />
+                <XAxis
                     type="number"
                     dataKey="x"
                     name="household number"
@@ -135,7 +153,7 @@ console.log(data)
                     stroke="#8884d8" />
 
                 <Tooltip cursor={{ strokeDasharray: "3 3" }} />
-                <Scatter name="household"  fill="#8884d8" >
+                <Scatter name="household" fill="#8884d8" >
                     {points.map((point, index) => (
                         <>
 
@@ -157,8 +175,8 @@ console.log(data)
 
             >
                 <CartesianGrid />
-                <XAxis type="number" dataKey="y" name="electricity consumption" unit="kwh" />
-                <YAxis
+                <YAxis type="number" dataKey="y" name="electricity consumption" unit="kwh" />
+                <XAxis
                     type="number"
                     dataKey="x"
                     name="household number"
@@ -169,12 +187,12 @@ console.log(data)
                     cursor={{ strokeDasharray: "3 3" }}
                     content={<CustomTooltip />} />
                 }
-                {regression && <Line dataKey="x" data={line} dot={true} activeDot={{ r: 8 }} allowDuplicatedCategory={false} />}
+                {regression && <Line dataKey="y" data={line} dot={true} activeDot={{ r: 8 }} allowDuplicatedCategory={false} />}
                 <Scatter name="electricity consumption" fill="#8884d8" allowDuplicatedCategory={false} data={regression && points}>
                     {/* <Scatter name="household" dataKey="x"  fill="#8884d8" /> */}
                     {points.map((point, index) => (
                         <>
-                            
+
                             {/* <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} /> */}
                             <Cell key={`cell-${index}`} fill={point.y <= 5000 ? "#0088FE" : (point.y >= 5001 && point.y <= 10000) ? "#00C49F" : (point.y >= 10001 && point.y <= 15000) ? '#FFBB28' : "red"} />
                         </>
@@ -191,8 +209,31 @@ console.log(data)
                 household/electricity
             </Typography>
             <Typography variant="caption" display="block" gutterBottom>
-                Gradient: {gradient} Y Intercept: {yIntercept} 
+                Gradient: {gradient} Y Intercept: {yIntercept}
             </Typography>
+            <Box>
+                <form
+                    className="shadow-lg"
+                    onSubmit={submitHandler}
+                >
+                    <TextField
+                        type="text"
+                        id="household"
+                        className="form-control"
+                        value={val}
+                        onChange={(e) => setVal(e.target.value)}
+                        required
+                        label="Number of people in household"
+
+                    />
+                    <Box>
+                        <Button size="small" type="submit">Predict</Button>
+                    </Box>
+                </form>
+                <Typography variant="body2" display="block" gutterBottom>
+                    Predicted Electricity consumption: {predict[1]} Kwh
+                </Typography>
+            </Box>
         </Container>
     );
 }
