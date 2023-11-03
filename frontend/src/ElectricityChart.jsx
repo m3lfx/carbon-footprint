@@ -227,7 +227,7 @@ const ElectricityChart = () => {
 
                     />
                     <Box>
-                        <Button size="small" type="submit">Predict</Button>
+                        <Button size="small" variant="contained" type="submit">Predict</Button>
                     </Box>
                 </form>
                 <Typography variant="body2" display="block" gutterBottom>
