@@ -132,7 +132,7 @@ const ElectricityChart = () => {
         //     </ScatterChart>
         // </ResponsiveContainer>
 
-        <Container width="90%" height="500px">
+        <Container width="lg" height="500px">
             {!regression ? <ScatterChart
                 width={800}
                 height={600}
@@ -141,7 +141,7 @@ const ElectricityChart = () => {
                     top: 20,
                     right: 20,
                     bottom: 20,
-                    left: 20
+                    left: 30
                 }} >
                 <CartesianGrid />
                 <YAxis type="number" dataKey="y" name="electricity consumption" unit="pesos" />
@@ -170,7 +170,7 @@ const ElectricityChart = () => {
                     top: 20,
                     right: 80,
                     bottom: 20,
-                    left: 20,
+                    left: 30,
                 }}
 
             >

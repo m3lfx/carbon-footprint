@@ -15,7 +15,7 @@ function App() {
 
   return (
     <Container maxWidth="lg">
-      {value === 'elec' ? <Box sx={{ bgcolor: '#cfe8fc', }} >
+      {value === 'elec' ? <Box sx={{ bgcolor: '#cfe8fc', }} maxWidth="lg" >
         <ElectricityChart />
       </Box> :
         <Box sx={{ bgcolor: '#FCE5A4', }} >
