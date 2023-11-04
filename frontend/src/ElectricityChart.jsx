@@ -188,7 +188,7 @@ const ElectricityChart = () => {
                     content={<CustomTooltip />} />
                 }
                 {regression && <Line dataKey="y" data={line} dot={true} activeDot={{ r: 8 }} allowDuplicatedCategory={false} />}
-                <Scatter name="electricity consumption" fill="#8884d8" allowDuplicatedCategory={false} data={regression && points}>
+                <Scatter name="electricity consumption" fill="#8884d8"  data={regression && points}>
                     {/* <Scatter name="household" dataKey="x"  fill="#8884d8" /> */}
                     {points.map((point, index) => (
                         <>

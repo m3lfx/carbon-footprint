@@ -14,7 +14,7 @@ function App() {
       <Box sx={{ bgcolor: '#cfe8fc', }} >
         <ElectricityChart />
       </Box>
-      <Box sx={{ bgcolor: 'white', }} >
+      <Box sx={{ bgcolor: '#FCE5A4', }} >
         <GasChart />
       </Box>
 

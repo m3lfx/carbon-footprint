@@ -6,13 +6,6 @@ const csvFilePath = './data/carbon2.csv' // Resource.csv in your case
 const gasCsv = './data/carbon_gas.csv'
 const csv = require('csvtojson') // Make sure you have this line in order to call functions from this modules
 
-let carbonData = []
-let gasData = []
-
-
-console.log(carbonData)
-
-
 // const result = regression.linear(carbonData);
 // console.log(result)
 // const gradient = result.equation[0];
@@ -52,7 +45,7 @@ app.get('/api/v1/carbon-electricity', (req, res) => {
             order: 1,
             precision: 2,
         },)
-        console.log(result.predict(25))
+        // console.log(result.predict(25))
         const gradient = result.equation[0];
         const yIntercept = result.equation[1];
         // console.log(result,gradient, yIntercept)
@@ -87,12 +80,12 @@ app.get('/api/v1/carbon-gas', (req, res) => {
             precision: 2,
         },)
         // console.log(result.equation[0], result.equation[1])
-        const gradient = result.equation[0];
-        const yIntercept = result.equation[1];
+        const gradient = resultGas.equation[0];
+        const yIntercept = resultGas.equation[1];
         // console.log(result,gradient, yIntercept)
 
         let pts = {}
-        chartObj = result.points.map(item => {
+        chartObj = resultGas.points.map(item => {
             pts = { x: item[0], y: item[1] }
             predictLine.push(pts)
         })
@@ -102,21 +95,39 @@ app.get('/api/v1/carbon-gas', (req, res) => {
 })
 
 app.post('/api/v1/predict', async (req, res, next) => {
-    csv({ noheader: true, output: "csv" }).fromFile(csvFilePath).then((jsonObj) => {
-        carbonData = jsonObj.map(item => {
-            return item.map(Number)
-        })
-        result = regression.linear(carbonData)
+    if (req.body.type === 'electricity') {
+        csv({ noheader: true, output: "csv" }).fromFile(csvFilePath).then((jsonObj) => {
+            carbonData = jsonObj.map(item => {
+                return item.map(Number)
+            })
+            result = regression.linear(carbonData,  {
+                order: 3,
+                precision: 4,
+            })
+            predict = result.predict(req.body.value)
 
-        if (req.body.type === 'electricity') {
-                predict = result.predict(req.body.value)
-           }
-      
-        res.status(201).json({
-            success: true,
-            predict,
+            return res.status(201).json({
+                success: true,
+                predict,
+            })
         })
-    })
+    }
+    else {
+        csv({ noheader: true, output: "csv" }).fromFile(gasCsv).then((jsonObj) => {
+            carbonData = jsonObj.map(item => {
+                return item.map(Number)
+            })
+            result = regression.linear(carbonData)
+            predict = result.predict(req.body.value)
+
+            return res.status(201).json({
+                success: true,
+                predict,
+            })
+        })
+    }
+    // res.status(400).json({message: "no data available", })
+
 
 })
 app.listen(8080, () => {
