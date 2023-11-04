@@ -144,7 +144,7 @@ const ElectricityChart = () => {
                     left: 20
                 }} >
                 <CartesianGrid />
-                <YAxis type="number" dataKey="y" name="electricity consumption" unit="kwh" />
+                <YAxis type="number" dataKey="y" name="electricity consumption" unit="pesos" />
                 <XAxis
                     type="number"
                     dataKey="x"
@@ -175,7 +175,7 @@ const ElectricityChart = () => {
 
             >
                 <CartesianGrid />
-                <YAxis type="number" dataKey="y" name="electricity consumption" unit="kwh" />
+                <YAxis type="number" dataKey="y" name="electricity consumption" unit="pesos" />
                 <XAxis
                     type="number"
                     dataKey="x"
