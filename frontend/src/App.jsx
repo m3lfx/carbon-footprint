@@ -23,7 +23,7 @@ function App() {
         </Box>}
       <Box  >
         <FormControl>
-          <FormLabel id="demo-controlled-radio-buttons-group">Gender</FormLabel>
+          <FormLabel id="demo-controlled-radio-buttons-group">carbon factor</FormLabel>
           <RadioGroup
             aria-labelledby="demo-controlled-radio-buttons-group"
             name="controlled-radio-buttons-group"

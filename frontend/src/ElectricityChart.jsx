@@ -34,7 +34,7 @@ const ElectricityChart = () => {
         loading: true,
         indicator: <Audio width="50" />,
         loaderProps: {
-            valueText: 'Fetching video from the Great Internet',
+            valueText: 'fetching carbon data',
         },
     });
 
