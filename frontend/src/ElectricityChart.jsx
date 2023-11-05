@@ -12,6 +12,7 @@ import {
     Cell,
 } from 'recharts';
 import { Container, Switch, FormControlLabel, Typography, Box, TextField, Button } from '@mui/material';
+import { useLoading, Audio } from '@agney/react-loading';
 
 import axios from "axios";
 
@@ -29,6 +30,14 @@ const ElectricityChart = () => {
     const [yIntercept, setYIntercept] = useState(0)
     const [val, setVal] = useState('')
     const [predict, setPredict] = useState([])
+    const { containerProps, indicatorEl } = useLoading({
+        loading: true,
+        indicator: <Audio width="50" />,
+        loaderProps: {
+            valueText: 'Fetching video from the Great Internet',
+        },
+    });
+
 
     const handleChange = (event) => {
         setChecked(event.target.checked);
@@ -132,7 +141,8 @@ const ElectricityChart = () => {
         //     </ScatterChart>
         // </ResponsiveContainer>
 
-        <Container width="lg" height="500px">
+        loading ? indicatorEl :
+        (<Container width="lg" height="500px">
             {!regression ? <ScatterChart
                 width={800}
                 height={600}
@@ -188,7 +198,7 @@ const ElectricityChart = () => {
                     content={<CustomTooltip />} />
                 }
                 {regression && <Line dataKey="y" data={line} dot={true} activeDot={{ r: 8 }} allowDuplicatedCategory={false} />}
-                <Scatter name="electricity consumption" fill="#8884d8"  data={regression && points}>
+                <Scatter name="electricity consumption" fill="#8884d8" data={regression && points}>
                     {/* <Scatter name="household" dataKey="x"  fill="#8884d8" /> */}
                     {points.map((point, index) => (
                         <>
@@ -234,7 +244,7 @@ const ElectricityChart = () => {
                     Predicted Electricity consumption: {predict[1]} Kwh
                 </Typography>
             </Box>
-        </Container>
+        </Container>)
     );
 }
 export default ElectricityChart 
