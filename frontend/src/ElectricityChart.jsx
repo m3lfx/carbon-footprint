@@ -12,7 +12,7 @@ import {
     Cell,
 } from 'recharts';
 import { Container, Switch, FormControlLabel, Typography, Box, TextField, Button } from '@mui/material';
-import { useLoading, Audio } from '@agney/react-loading';
+import { useLoading, Bars } from '@agney/react-loading';
 
 import axios from "axios";
 
@@ -32,11 +32,12 @@ const ElectricityChart = () => {
     const [predict, setPredict] = useState([])
     const { containerProps, indicatorEl } = useLoading({
         loading: true,
-        indicator: <Audio width="50" />,
+        indicator: <Bars width="100" />,
         loaderProps: {
             valueText: 'fetching carbon data',
         },
     });
+    console.log(containerProps)
 
 
     const handleChange = (event) => {
@@ -62,7 +63,7 @@ const ElectricityChart = () => {
 
     // eslint-disable-next-line react/prop-types
     const CustomTooltip = ({ active, payload }) => {
-        console.log(payload)
+        // console.log(payload)
         // eslint-disable-next-line react/prop-types
         if (active && payload && payload.length) {
             return (
@@ -141,8 +142,8 @@ const ElectricityChart = () => {
         //     </ScatterChart>
         // </ResponsiveContainer>
 
-        loading ? indicatorEl :
-        (<Container width="lg" height="500px">
+        loading ? <section {...containerProps}  > {indicatorEl}  </section>:
+        (<Container width="lg" height="500px" >
             {!regression ? <ScatterChart
                 width={800}
                 height={600}
@@ -162,7 +163,7 @@ const ElectricityChart = () => {
                     unit="person"
                     stroke="#8884d8" />
 
-                <Tooltip cursor={{ strokeDasharray: "3 3" }} />
+                <Tooltip cursor={{ strokeDasharray: "3 3" }}  wrapperStyle={{ backgroundColor: "red", borderStyle: "ridge", paddingLeft: "10px", paddingRight: "10px" }} />
                 <Scatter name="household" fill="#8884d8" >
                     {points.map((point, index) => (
                         <>
