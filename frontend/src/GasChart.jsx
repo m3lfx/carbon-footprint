@@ -111,7 +111,11 @@ const GasChart = () => {
                     stroke="#8884d8" />
 
                 {/* <Tooltip cursor={{ strokeDasharray: "3 3" }} /> */}
-                <Tooltip cursor={{ fill: 'transparent' }}   />
+                {/* <Tooltip cursor={{ fill: 'transparent' }}   /> */}
+                <Tooltip
+                    cursor={{ strokeDasharray: "3 3" }}
+                    content={<CustomTooltip />} />
+                }
                 <Scatter name="household" fill="#8884d8" >
                     {points.map((point, index) => (
                         <>
